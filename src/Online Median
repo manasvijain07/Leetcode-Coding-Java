@@ -61,3 +61,45 @@ Sc - O(n)
         }
         return res;
     }
+
+-------------------------------------
+
+Sol 2 - Tc - O(n) SC - O(n)
+
+    static ArrayList<Integer> online_median(ArrayList<Integer> stream) {
+        // Write your code here.
+        PriorityQueue<Integer> left = new PriorityQueue<>(Collections.reverseOrder());
+        PriorityQueue<Integer> right = new PriorityQueue<>();
+        ArrayList<Integer> res = new ArrayList<>();
+        
+        for(int i = 0; i < stream.size(); i++)
+        {
+            left.add(stream.get(i));
+            
+            if((!right.isEmpty() && left.peek() > right.peek()) || left.size() - right.size() > 1)
+            {
+                right.add(left.poll());
+            }
+            
+            if(right.size() - left.size() > 1)
+            {
+                left.add(right.poll());
+            }
+            
+            if(left.size() > right.size())
+            {
+                res.add(left.peek());
+            }
+            else if(right.size() > left.size())
+            {
+                res.add(right.peek());
+            }
+            else
+            {
+                // System.out.println(left.peek() + " : " + right.peek());
+                res.add((left.peek() + right.peek())/2);
+            }
+        }
+        return res;
+    }
+
